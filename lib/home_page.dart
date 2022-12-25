@@ -16,6 +16,20 @@ class _HomePageState extends State<HomePage> {
     'D',
   ];
 
+  void updateMyTiles(int oldIndex, int newIndex) {
+    setState(() {
+      if (oldIndex < newIndex) {
+        newIndex--;
+      }
+
+      final tile = myTiles.removeAt(oldIndex);
+
+      myTiles.insert(newIndex, tile);
+
+    });
+  }
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -25,7 +39,12 @@ class _HomePageState extends State<HomePage> {
       body: ReorderableListView(
         children: [
           for (final tile in myTiles)
+            ListTile(
+              key: ValueKey(tile),
+              title: Text(tile),
+            ),
         ],
+        onReorder: (oldIndex, newIndex) => () {},
 
       ),
     );
