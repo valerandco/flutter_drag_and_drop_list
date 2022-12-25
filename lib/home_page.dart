@@ -1,51 +1,61 @@
 import 'package:flutter/material.dart';
 
 class HomePage extends StatefulWidget {
-  const HomePage({Key? key}) : super(key: key);
+  const HomePage({super.key});
 
   @override
   State<HomePage> createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> {
-
+  // list of tiles
   final List myTiles = [
     'A',
     'B',
     'C',
     'D',
+    'E',
+    'F',
   ];
 
+  // reorder method
   void updateMyTiles(int oldIndex, int newIndex) {
     setState(() {
+      // this adjustment is needed when moving down the list
       if (oldIndex < newIndex) {
-        newIndex--;
+        newIndex -= 1;
       }
 
-      final tile = myTiles.removeAt(oldIndex);
-
+      // get the tile we are moving
+      final String tile = myTiles.removeAt(oldIndex);
+      // place the tile in new position
       myTiles.insert(newIndex, tile);
-
     });
   }
-
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Drag & Drop List'),
-      ),
+      backgroundColor: Colors.brown[200],
+      appBar: AppBar(title: const Text("Re-Orderable ListView"), backgroundColor: Colors.brown[400],),
       body: ReorderableListView(
+        padding: const EdgeInsets.all(10),
         children: [
           for (final tile in myTiles)
-            ListTile(
+            Padding(
               key: ValueKey(tile),
-              title: Text(tile),
+              padding: const EdgeInsets.all(8.0),
+              child: Container(
+                color: Colors.brown[300],
+                child: ListTile(
+                  title: Text(tile.toString()),
+                ),
+              ),
             ),
         ],
-        onReorder: (oldIndex, newIndex) => () {},
-
+        onReorder: (oldIndex, newIndex) {
+          updateMyTiles(oldIndex, newIndex);
+        },
       ),
     );
   }
